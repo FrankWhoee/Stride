@@ -11,19 +11,26 @@ import matplotlib.pyplot as plt
 example_json = '{' \
                 '"data":[' \
                     '{"ts": 10000, "x":0, "y" : 0, "z": 0},' \
-                    '{"ts": 10000, "x":0, "y" : 0, "z": 0},' \
-                    '{"ts": 10000, "x":0, "y" : 0, "z": 0},' \
-                    '{"ts": 10000, "x":0, "y" : 0, "z": 0}' \
+                    '{"ts": 10000, "x":1, "y" : 0, "z": 0},' \
+                    '{"ts": 10000, "x":2, "y" : 0, "z": 0},' \
+                    '{"ts": 10000, "x":3, "y" : 0, "z": 0},' \
+                    '{"ts": 10000, "x":4, "y" : 0, "z": 0},' \
+                    '{"ts": 10000, "x":5, "y" : 0, "z": 0},' \
+                    '{"ts": 10000, "x":6, "y" : 0, "z": 0},'\
+                    '{"ts": 10000, "x":7, "y" : 0, "z": 0}'\
                 ']' \
                '}'
 
 def convertToNp(json):
     json = js.loads(example_json)
     data = json["data"]
-    output = np.zeros((len(data), 3, 4))
-    for i, object in enumerate(data):
-        output[i] = object["ts"], object["x"], object["y"], object["z"]
-        print(output[i])
+    output = np.zeros((int(len(data)/4), 4, 4))
+    for time_span in range(len(output)):
+        for time in range(len(output[time_span])):
+            print(time_span, (time + time_span * 4))
+            object = data[time + time_span * 4]
+            output[time_span][time] = object["ts"], object["x"], object["y"], object["z"]
+    print(output)
     return output
 
 
