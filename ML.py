@@ -88,6 +88,8 @@ print(str(num_classes) + " classes set.")
 y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
 
+print(x_train[4])
+
 model = Sequential()
 
 # Dense layers and output
