@@ -1,6 +1,12 @@
 from __future__ import print_function
-import json
+import json as js
 import numpy as np
+import time
+import os
+import keras
+from keras.models import Sequential
+from keras.layers import Dense, Dropout
+import matplotlib.pyplot as plt
 
 example_json = '{' \
                 '"data":[' \
@@ -12,25 +18,16 @@ example_json = '{' \
                '}'
 
 def convertToNp(json):
-    json = json.loads(example_json)
+    json = js.loads(example_json)
     data = json["data"]
     output = np.zeros((len(data), 3, 4))
     for i, object in enumerate(data):
         output[i] = object["ts"], object["x"], object["y"], object["z"]
+        print(output[i])
     return output
 
 
 x_train = convertToNp(example_json)
-
-import time
-import os
-
-import keras
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
-
-import matplotlib.pyplot as plt
-import tensorflow
 
 # Set up CNN
 batch_size = 2
