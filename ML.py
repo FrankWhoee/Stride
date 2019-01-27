@@ -1,20 +1,42 @@
 from __future__ import print_function
+import json
+import numpy as np
+
+example_json = '{' \
+                '"data":[' \
+                    '{"ts": 10000, "x":0, "y" : 0, "z": 0},' \
+                    '{"ts": 10000, "x":0, "y" : 0, "z": 0},' \
+                    '{"ts": 10000, "x":0, "y" : 0, "z": 0},' \
+                    '{"ts": 10000, "x":0, "y" : 0, "z": 0}' \
+                ']' \
+               '}'
+
+def convertToNp(json):
+    json = json.loads(example_json)
+    data = json["data"]
+    output = np.zeros((len(data), 3, 4))
+    for i, object in enumerate(data):
+        output[i] = object["ts"], object["x"], object["y"], object["z"]
+    return output
+
+
+x_train = convertToNp(example_json)
+
 import time
 import os
-import numpy as np
+
 import keras
-from keras.datasets import mnist
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
-from keras.layers import Conv2D, MaxPooling2D
-import random
-import scipy.misc
+
 import matplotlib.pyplot as plt
+import tensorflow
 
 # Set up CNN
 batch_size = 2
 num_classes = 2
 epochs = 8
+
 
 # x_train = train_data.reshape(fn,fl,fw,1)
 # x_test = test_data.reshape(fn,fl,fw,1)
@@ -32,19 +54,7 @@ y_test = keras.utils.to_categorical(y_test, num_classes)
 
 model = Sequential()
 
-# Convolutional layers and Max pooling
-model.add(Conv2D(32, kernel_size=(3, 3),
-                 activation='relu',
-                 input_shape=(fl,fw,1)))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Conv2D(64, (3, 3), activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Conv2D(128, (3, 3), activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Conv2D(256, (3, 3), activation='relu'))
-
 # Dense layers and output
-model.add(Flatten())
 model.add(Dense(1024, activation='relu'))
 model.add(Dropout(0.1))
 model.add(Dense(2048, activation='relu'))
